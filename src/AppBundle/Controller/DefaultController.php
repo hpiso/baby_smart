@@ -74,7 +74,7 @@ class DefaultController extends Controller
 
                     $gpio = Theme::$THEMES_GPIO_NUMBERS[$randomTheme];
 
-                // Set the theme that the average is the lowest
+                // Set the theme where the average time is the lowest
                 } else {
                     $themes = $this->get('baby_service')->getThemesByAverage($sessions);
                     $session->setTheme($themes[0]['theme_id']);
