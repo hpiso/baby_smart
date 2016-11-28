@@ -1,0 +1,92 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col s12 center-align">
+                <form id="form" action="" method="post">
+                    <div class="switch">
+                        <label>
+                            Baby is sleeping
+                            <input name="isCrying" type="checkbox">
+                            <span class="lever"></span>
+                            Baby is crying
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s4">
+                <div id="1" class="theme blue lighten-4 center-align">
+                    <span>Theme 1</span>
+                </div>
+                <p>Total time : <span class="totalTime1"></span> </p>
+                <p>Number of time used: <span class="totalNb1"></span> </p>
+                <p>Average to stop crying: <b><span class="average1"></span> </b></p>
+            </div>
+            <div class="col s4">
+                <div id="2" class="theme green lighten-4 center-align">
+                    <span>Theme 2</span>
+                </div>
+                <p>Total time : <span class="totalTime2"></span> </p>
+                <p>Number of time used: <span class="totalNb2"></span> </p>
+                <p>Average to stop crying: <b><span class="average2"></span></b> </p>
+            </div>
+            <div class="col s4">
+                <div id="3" class="theme red lighten-4 center-align">
+                    <span>Theme 3</span>
+                </div>
+                <p>Total time : <span class="totalTime3"></span> </p>
+                <p>Number of time used: <span class="totalNb3"></span> </p>
+                <p>Average to stop crying: <b><span class="average3"></span> </b></p>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(function() {
+            $('#form').on('change', function() {
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize()
+                }).done(function(data) {
+                    if (data.state == 'on') {
+
+                        switch(data.theme) {
+                            case 1:
+                                $('#1').removeClass('lighten-4');
+                                break;
+                            case 2:
+                                $('#2').removeClass('lighten-4');
+                                break;
+                            case 3:
+                                $('#3').removeClass('lighten-4');
+                                break;
+                        }
+
+                    } else if(data.state == 'off') {
+                        $('.theme').addClass('lighten-4')
+                    }
+
+
+                    data.result.forEach(function(i) {
+                        console.log(i);
+                        $('.totalTime' + i.theme_id).text(i.total + ' sec');
+                        $('.totalNb' + i.theme_id).text(i.nb + ' time(s)');
+                        $('.average' + i.theme_id).text(i.average + ' sec');
+                    })
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+
+
